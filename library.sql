@@ -49,7 +49,7 @@ CREATE TABLE member(
     phone varchar2(11),
     mail varchar2(255) NOT NULL,
     member_password varchar2(255) NOT NULL,
-    address varchar2(255),
+    address varchar2(255) not null,
     status number(1),
     role_id number(10) NOT NULL
 );
@@ -95,7 +95,7 @@ CREATE TABLE book(
 
 CREATE TABLE CD(
     item_id number(11) not null,
-    film_name varchar2(255),
+    film_name varchar2(255) not null,
     age_constraint number(2)
 );
 
@@ -164,4 +164,6 @@ ALTER TABLE book ADD CONSTRAINT PK_Book_ITEM PRIMARY KEY (item_id);
 
 ALTER TABLE Current_Loan ADD CONSTRAINT loanItem CHECK(due_date - loan_date < 16);
 ALTER TABLE reservation ADD CONSTRAINT checkDate CHECK (end_date-start_date <16);
+ALTER TABLE magazine ADD CONSTRAINT checkPageCount(page_count>50);
+ALTER TABLE book ADD CONSTRAINT checkPageCount(page_count>50);
 
