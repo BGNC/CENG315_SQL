@@ -171,3 +171,7 @@ ALTER TABLE book ADD CONSTRAINT bookNameLength CHECK(LENGTH(book_name)>2); // ki
 ALTER TABLE CD ADD CONSTRAINT cdNameLength CHECK(LENGTH(film_name)>0); // film ismi boşluk olamaz
 ALTER TABLE book ADD CONSTRAINT bookVolumeCont CHECK(book_volume>0); // 1.baskı / 2.baskı 0.baskı kabul edilmeyecek
 
+ALTER TABLE member
+ADD CONSTRAINT chk_email CHECK(email LIKE '%_@__%.__%');
+
+
