@@ -164,6 +164,6 @@ ALTER TABLE book ADD CONSTRAINT PK_Book_ITEM PRIMARY KEY (item_id);
 
 ALTER TABLE Current_Loan ADD CONSTRAINT loanItem CHECK(due_date - loan_date < 16);
 ALTER TABLE reservation ADD CONSTRAINT checkDate CHECK (end_date-start_date <16);
-ALTER TABLE magazine ADD CONSTRAINT checkPageCount(page_count>50);
-ALTER TABLE book ADD CONSTRAINT checkPageCount(page_count>50);
+ALTER TABLE magazine ADD CONSTRAINT checkPageCount CHECK(page_count>50);
+ALTER TABLE book ADD CONSTRAINT checkPageCount CHECK(page_count>50);
 
