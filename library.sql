@@ -166,4 +166,8 @@ ALTER TABLE Current_Loan ADD CONSTRAINT loanItem CHECK(due_date - loan_date < 16
 ALTER TABLE reservation ADD CONSTRAINT checkDate CHECK (end_date-start_date <16);
 ALTER TABLE magazine ADD CONSTRAINT checkPageCount CHECK(page_count>50);
 ALTER TABLE book ADD CONSTRAINT checkPageCount CHECK(page_count>50);
+ALTER TABLE magazine ADD CONSTRAINT magazineNameLength CHECK(LENGTH(magazine_name)>2); // magazinin ismi en az 3 harf olmalı
+ALTER TABLE book ADD CONSTRAINT bookNameLength CHECK(LENGTH(book_name)>2); // kitabın adı en az 3 harf olmalı
+ALTER TABLE CD ADD CONSTRAINT cdNameLength CHECK(LENGTH(film_name)>0); // film ismi boşluk olamaz
+ALTER TABLE book ADD CONSTRAINT bookVolumeCont CHECK(book_volume>0); // 1.baskı / 2.baskı 0.baskı kabul edilmeyecek
 
