@@ -13,11 +13,7 @@ DROP TABLE member;
 
 
 DROP TABLE publisher;
-
-
-
 DROP TABLE role;
-
 
 DROP TABLE category;
 
@@ -152,6 +148,7 @@ ALTER TABLE Current_Loan ADD CONSTRAINT FK_Item FOREIGN KEY (item_id) REFERENCES
 
 
 -- PRIMARY KEYS
+
 ALTER TABLE magazine ADD CONSTRAINT PK_MAGAZINE_ITEM PRIMARY KEY (item_id);
 ALTER TABLE CD ADD CONSTRAINT PK_CD_ITEM PRIMARY KEY (item_id);
 ALTER TABLE book ADD CONSTRAINT PK_Book_ITEM PRIMARY KEY (item_id);
@@ -164,14 +161,38 @@ ALTER TABLE book ADD CONSTRAINT PK_Book_ITEM PRIMARY KEY (item_id);
 
 ALTER TABLE Current_Loan ADD CONSTRAINT loanItem CHECK(due_date - loan_date < 16);
 ALTER TABLE reservation ADD CONSTRAINT checkDate CHECK (end_date-start_date <16);
-ALTER TABLE magazine ADD CONSTRAINT checkPageCount CHECK(page_count>50);
-ALTER TABLE book ADD CONSTRAINT checkPageCount CHECK(page_count>50);
-ALTER TABLE magazine ADD CONSTRAINT magazineNameLength CHECK(LENGTH(magazine_name)>2); // magazinin ismi en az 3 harf olmalı
-ALTER TABLE book ADD CONSTRAINT bookNameLength CHECK(LENGTH(book_name)>2); // kitabın adı en az 3 harf olmalı
-ALTER TABLE CD ADD CONSTRAINT cdNameLength CHECK(LENGTH(film_name)>0); // film ismi boşluk olamaz
-ALTER TABLE book ADD CONSTRAINT bookVolumeCont CHECK(book_volume>0); // 1.baskı / 2.baskı 0.baskı kabul edilmeyecek
+ALTER TABLE magazine ADD CONSTRAINT checkPageCount CHECK(page_count>5);
+ALTER TABLE book ADD CONSTRAINT bookCheck CHECK(page_count>5 AND book_volume>0);
 
-ALTER TABLE member
-ADD CONSTRAINT chk_email CHECK(email LIKE '%_@__%.__%');
+
+ALTER TABLE member ADD CONSTRAINT chk_email CHECK(mail LIKE '%_@__%.__%');
+
+
+
+CREATE OR REPLACE TRIGGER PreInsertreservation
+BEFORE INSERT ON reservation
+FOR EACH ROW
+BEGIN
+    
+    SELECT status INTO :NEW.status
+    FROM member
+    WHERE member_id = :NEW.member_id;
+
+    IF :NEW.status != 1 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Error: Member has an inactive status MEMBER . STATUS = 0 ');
+    END IF;
+
+    SELECT member_id INTO :NEW.member_id
+    FROM item
+    WHERE item.member_id = :NEW.member_id;
+    
+    IF :NEW.member_id IS NOT NULL THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Error: MEMBER NOT NULL ');
+    END IF;
+
+    IF :new.start_date >= :new.end_date THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Error: Start date must be before end date');
+    END IF;
+END;
 
 
